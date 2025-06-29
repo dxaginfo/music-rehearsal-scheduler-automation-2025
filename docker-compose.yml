@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  server:
+    build: .
+    working_dir: /app/server
+    command: npm run start
+    environment:
+      - POSTGRES_URL=your_pg_url_here
+      - JWT_SECRET=changeme
+      - GOOGLE_CLIENT_ID=changeme
+      - GOOGLE_CLIENT_SECRET=changeme
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+  client:
+    build: .
+    working_dir: /app/client
+    command: npm run start
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=rehearsal
+    ports:
+      - "5432:5432"
